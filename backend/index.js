@@ -110,5 +110,20 @@ app.post('/heroes/:slug/power/:power', checkIfHeroExist,checkIfPowerExist, (req,
     res.send(text)
 })
 
+app.put('/heroes/:slug', (req, res, next)=>{
+    const body = req.body
+    heroModel.updateMany({},
+                {
+                slug:body.slug,
+                name:body.name,
+                power:body.power,
+                color:body.color,
+                isAlive:body.isAlive,
+                age:body.age,
+                image:body.image    
+            }                
+        ).then(ok=>console.log(ok))
+    res.send('oki')
+})
 
 app.listen(3000)
