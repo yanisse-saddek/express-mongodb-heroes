@@ -82,16 +82,8 @@ app.get('/heroes/:slug/powers', (req, res, next)=>{
 })
 app.post('/heroes', checkIfExist ,validateHero,  (req, res, next)=>{
     const data = JSON.parse(Object.keys(req.body))
-    const hero = new heroModel({
-        slug: data.slug,
-        name: data.name,
-        power: data.power,
-        color: data.color,
-        age: data.age,
-        image: data.image
-    })
-    hero.save()
-    res.send(hero)
+    heroModel.insertMany(data)
+    res.send(data)
 })
 app.put('/heroes/:slug/powers', validateHero,  (req, res, next)=>{
     const data = req.body
