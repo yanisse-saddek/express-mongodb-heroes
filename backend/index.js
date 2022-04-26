@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 const heroModel = require('./model/hero')
 const heroList = require('./heroList.js')
 app.use(express.urlencoded({extended: false}))
+app.use(cors())
+// app.use(morgan())
 async function conn (){
  await mongoose.connect('mongodb://localhost:27017/heroes')
 }
@@ -45,10 +47,14 @@ const checkIfPowerExist = (req, res, next)=>{
     })
 }
 const checkIfExist = (req, res, next)=>{
-    heroModel.find({name:req.body.name}).then(data=>{
+    console.log(req.body)
+    const data = JSON.parse(Object.keys(req.body))
+    console.log(data)
+
+    heroModel.find({name:data.name}).then(data=>{
+        console.log(data)
         if(data.length>0){
             console.log('ca existi')
-            console.log(data)
             res.send('Le hero existe deja')
         }else{
             console.log('existe po')
@@ -57,13 +63,14 @@ const checkIfExist = (req, res, next)=>{
     })
 }
 const validateHero = (req, res, next)=>{
-    const data = req.body
-    console.log(typeof data.age)
-    if(data.slug && data.name && data.power && data.color && data.isAlive && data.age && data.image){
-        next()
-    }else{
-        res.send('erreur de syntaxe ')
-    }
+    console.log('VALIDATEHROOOOOO')
+    const data = JSON.parse(Object.keys(req.body))
+        if(data.slug && data.name && data.power && data.color  && data.age && data.image){
+            next()
+            console.log('bidule de poche')
+        }else{
+            res.send('erreur de syntaxe ')
+        }
 }
 app.get('/heroes', (req, res, next)=>{
     heroModel.find({}).then(data=>{
@@ -82,17 +89,16 @@ app.get('/heroes/:slug/powers', (req, res, next)=>{
     })
 })
 app.post('/heroes', checkIfExist ,validateHero,  (req, res, next)=>{
-    const data = req.body
+    const data = JSON.parse(Object.keys(req.body))
     const hero = new heroModel({
         slug: data.slug,
         name: data.name,
         power: data.power,
         color: data.color,
-        isAlive: data.isAlive,
         age: data.age,
         image: data.image
     })
-    hero.save()    
+    hero.save().then(ok=>console.log(ok))
     res.send(hero)
 })
 app.put('/heroes/:slug/powers', validateHero,  (req, res, next)=>{
@@ -108,7 +114,8 @@ app.put('/heroes/:slug/powers', validateHero,  (req, res, next)=>{
 })
 
 
-app.post('/heroes/:slug', checkIfNotExist, validateHero, (req, res, next)=>{
+app.delete('/heroes/:slug', checkIfNotExist, validateHero, (req, res, next)=>{
+    console.log('supprimin')
     const text = req.params.slug+ " à bien été supprimé"
     res.send(text)
 })
@@ -132,4 +139,4 @@ app.put('/heroes/:slug',validateHero,  (req, res, next)=>{
     res.send('oki')
 })
 
-app.listen(3000)
+app.listen(4000)
