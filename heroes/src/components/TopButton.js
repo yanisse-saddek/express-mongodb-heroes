@@ -5,6 +5,7 @@ import { useState } from 'react'
 export default function TopButton(){
     const [input, setInput] = useState(false)
     const [formData, updateFormData] = useState(null);
+    const [check, setCheck] = useState(false);
 
     const handleChange = (e) => {
       updateFormData({
@@ -16,16 +17,23 @@ export default function TopButton(){
     const submit = (e)=>{
         e.preventDefault()
         console.log(formData)
+
         const url = 'http://localhost:4000/heroes'
         const option = {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: JSON.stringify(formData),
           }
-       
         fetch(url, option)
         .then((response)=>console.log(response))
         .then((data) => console.log(data))       
+    }
+    const inputChange = ()=>{
+        if(check){
+            setCheck(false)
+        }else{
+            setCheck(true)
+        }
     }
     return(
        <div className="container">

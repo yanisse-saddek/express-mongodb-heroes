@@ -37,7 +37,6 @@ const checkIfPowerExist = (req, res, next)=>{
         {slug:req.params.slug},
         { $pull: {power:req.params.power}}
     ).then(data=>{
-        console.log(data)
         if(data.modifiedCount>0){
             next()
         }else{
@@ -47,27 +46,20 @@ const checkIfPowerExist = (req, res, next)=>{
     })
 }
 const checkIfExist = (req, res, next)=>{
-    console.log(req.body)
     const data = JSON.parse(Object.keys(req.body))
-    console.log(data)
 
     heroModel.find({name:data.name}).then(data=>{
-        console.log(data)
         if(data.length>0){
-            console.log('ca existi')
             res.send('Le hero existe deja')
         }else{
-            console.log('existe po')
             next()
         }
     })
 }
 const validateHero = (req, res, next)=>{
-    console.log('VALIDATEHROOOOOO')
     const data = JSON.parse(Object.keys(req.body))
         if(data.slug && data.name && data.power && data.color  && data.age && data.image){
             next()
-            console.log('bidule de poche')
         }else{
             res.send('erreur de syntaxe ')
         }
@@ -98,7 +90,7 @@ app.post('/heroes', checkIfExist ,validateHero,  (req, res, next)=>{
         age: data.age,
         image: data.image
     })
-    hero.save().then(ok=>console.log(ok))
+    hero.save()
     res.send(hero)
 })
 app.put('/heroes/:slug/powers', validateHero,  (req, res, next)=>{
@@ -115,7 +107,6 @@ app.put('/heroes/:slug/powers', validateHero,  (req, res, next)=>{
 
 
 app.delete('/heroes/:slug', checkIfNotExist, validateHero, (req, res, next)=>{
-    console.log('supprimin')
     const text = req.params.slug+ " à bien été supprimé"
     res.send(text)
 })
@@ -135,7 +126,7 @@ app.put('/heroes/:slug',validateHero,  (req, res, next)=>{
                 age:body.age,
                 image:body.image    
             }                
-        ).then(ok=>console.log(ok))
+        )
     res.send('oki')
 })
 

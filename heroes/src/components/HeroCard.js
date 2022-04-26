@@ -9,7 +9,6 @@ export default function HeroCard(props){
             <div className="card-body">
                 <h5 className="card-title">{props.data.name}</h5>
                 <p className="card-text">Age: {props.data.age}</p>
-                <p className="card-text">isAlive: {props.data.isAlive?'oui':'non'}</p>
                 <p className="card-text">Power: {props.data.power}</p>
                 <p className="card-text">slug: {props.data.slug}</p>
                 <a href="#" onClick={()=>{context.changePage('hero', props.data)}}className="btn btn-primary">Afficher</a>

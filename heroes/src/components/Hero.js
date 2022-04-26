@@ -9,7 +9,6 @@ export default function Hero(props){
             <img src={props.data.image} style={{width:"100vw", height:"500px"}}/>
             <h5>{props.data.name}</h5>
                 <p>Age: {props.data.age}</p>
-                <p>isAlive: {props.data.isAlive?'oui':'non'}</p>
                 <p>Power: {props.data.power}</p>
                 <p>slug: {props.data.slug}</p>
                 <a href="#" class="btn btn-danger" onClick={()=>{context.delete(props.data)}}>Supprimer</a>
